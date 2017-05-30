@@ -100,21 +100,21 @@ namespace EHRWEBAPI.Controllers
             }
             string salt = null;
 
-            var contentType = Request.Content.Headers.ContentType.MediaType;
-            var requestParams = Request.Content.ReadAsStringAsync().Result;
-            if (contentType == "application/json")
-            {
-                Passusername1 PU = JsonConvert.DeserializeObject<Passusername1>(requestParams);
-
-                PU.username;
-                string Key = SHA1(SHA1((password.Text + usename.Text));
-
-
-            }
-            else
-            {
-                return  Ok(HttpStatusCode.UnsupportedMediaType);     // check this again
-            }
+//            var contentType = Request.Content.Headers.ContentType.MediaType;
+//            var requestParams = Request.Content.ReadAsStringAsync().Result;
+//            if (contentType == "application/json")
+//            {
+//                Passusername1 PU = JsonConvert.DeserializeObject<Passusername1>(requestParams);
+//
+//                var puUsername = PU.username;
+//                string Key = SHA1(SHA1((password.Text + usename.Text));
+//
+//
+//            }
+//            else
+//            {
+//                return  Ok(HttpStatusCode.UnsupportedMediaType);     // check this again
+//            }
             
             
            //  db.Users.Add(user);
@@ -139,8 +139,8 @@ namespace EHRWEBAPI.Controllers
         }
         public class Passusername1
         {
-            string username;
-            string password;
+            public string username;
+            public string password;
         }
 
 
