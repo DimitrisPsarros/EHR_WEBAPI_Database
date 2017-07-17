@@ -20,7 +20,7 @@ namespace EHRWEBAPI.Controllers
         // GET: api/DIagnosis
         public IQueryable<DIagnosi> GetDIagnosis()
         {
-            return db.DIagnosis;
+            return db.DIagnosis; 
         }
 
         // GET: api/DIagnosis/5

@@ -22,15 +22,15 @@ namespace EHRWEBAPI.Models
         }
     
         public int VisitID { get; set; }
-        public string Date { get; set; }
         public int DoctorPersonID { get; set; }
         public Nullable<int> PersonID { get; set; }
         public int NumberOfVisit { get; set; }
+        public string Date { get; set; }
     
-        public virtual Demographic Demographic { get; set; }
+        public virtual Demographic Demographic {internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DIagnosi> DIagnosis { get; set; }
+        public virtual ICollection<DIagnosi> DIagnosis {internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Treat_Medicines> Treat_Medicines { get; set; }
+        public virtual ICollection<Treat_Medicines> Treat_Medicines {internal get; set; }
     }
 }

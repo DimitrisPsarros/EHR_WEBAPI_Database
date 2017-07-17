@@ -16,9 +16,9 @@ namespace EHRWEBAPI.Models
     {
         public int DocumentsID { get; set; }
         public Nullable<int> PersonID { get; set; }
-        public string Date { get; set; }
         public byte[] file { get; set; }
         public Nullable<int> Document_TypeID { get; set; }
+        public string Date { get; set; }
     
         public virtual Demographic Demographic { get; set; }
         public virtual DocType DocType { get; set; }

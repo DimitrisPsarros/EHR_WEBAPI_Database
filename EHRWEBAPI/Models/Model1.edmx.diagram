@@ -5,26 +5,24 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="012fb4e16ec5438cb3a3dbceb146691d" Name="Diagram1">
-        <EntityTypeShape EntityType="EHRsystemModel.Communication" Width="1.5" PointX="3" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.Demographic" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.DIagnosi" Width="1.5" PointX="5.25" PointY="16.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.DocType" Width="1.5" PointX="3.75" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.Document" Width="1.5" PointX="6" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.Treat_Medicines" Width="1.5" PointX="5.25" PointY="18.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EHRsystemModel.Visit" Width="1.5" PointX="3" PointY="17.125" IsExpanded="true" />
-        <AssociationConnector Association="EHRsystemModel.FK_Communication_Demographics" ManuallyRouted="false" />
-        <AssociationConnector Association="EHRsystemModel.FK_Documents_Demographics" ManuallyRouted="false" />
-        <AssociationConnector Association="EHRsystemModel.FK_Visit_Demographics" ManuallyRouted="false" />
-        <AssociationConnector Association="EHRsystemModel.FK_DIagnosis_Visit" ManuallyRouted="false" />
-        <AssociationConnector Association="EHRsystemModel.FK_Documents_DocType" ManuallyRouted="false" />
-        <AssociationConnector Association="EHRsystemModel.FK_Treat_Medicines_Visit" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="EHRsystemModel.Contact" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="EHRsystemModel.Communication" Width="1.5" PointX="3" PointY="16.5" />
+        <EntityTypeShape EntityType="EHRsystemModel.Contact" Width="1.5" PointX="3" PointY="19.25" />
+        <EntityTypeShape EntityType="EHRsystemModel.Demographic" Width="1.5" PointX="0.75" PointY="8.875" />
+        <EntityTypeShape EntityType="EHRsystemModel.DIagnosi" Width="1.5" PointX="5.25" PointY="7.125" />
+        <EntityTypeShape EntityType="EHRsystemModel.DocType" Width="1.5" PointX="3.75" PointY="14" />
+        <EntityTypeShape EntityType="EHRsystemModel.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EHRsystemModel.User" Width="1.5" PointX="3" PointY="10.125" />
+        <AssociationConnector Association="EHRsystemModel.FK_Communication_Demographics" />
         <AssociationConnector Association="EHRsystemModel.FK_Contacts_Demographics" />
-        <EntityTypeShape EntityType="EHRsystemModel.DataSender" Width="1.5" PointX="3" PointY="6.25" />
-        <AssociationConnector Association="EHRsystemModel.FK_DataSender_Demographics" />
-        <EntityTypeShape EntityType="EHRsystemModel.User" Width="1.5" PointX="3" PointY="13.25" />
         <AssociationConnector Association="EHRsystemModel.FK_Users_Demographics" />
+        <EntityTypeShape EntityType="EHRsystemModel.Document" Width="1.5" PointX="6" PointY="11" />
+        <EntityTypeShape EntityType="EHRsystemModel.Visit" Width="1.5" PointX="3" PointY="6.5" />
+        <AssociationConnector Association="EHRsystemModel.FK_Documents_Demographics" />
+        <AssociationConnector Association="EHRsystemModel.FK_Visit_Demographics" />
+        <AssociationConnector Association="EHRsystemModel.FK_DIagnosis_Visit" />
+        <AssociationConnector Association="EHRsystemModel.FK_Documents_DocType" />
+        <EntityTypeShape EntityType="EHRsystemModel.DataSender" Width="1.5" PointX="3" PointY="2.5" />
+        <AssociationConnector Association="EHRsystemModel.FK_DataSender_Demographics" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

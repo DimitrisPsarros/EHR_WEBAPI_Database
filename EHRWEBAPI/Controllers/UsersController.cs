@@ -29,10 +29,10 @@ namespace EHRWEBAPI.Controllers
             var UserInfo = from b in db.Users
                            select new UserDetails()           // correct
                            {
-                               UserID = b.UserID,
+                               //UserID = b.UserID,
                                PersonID = b.PersonID,
-                               UserName = b.UserName,
-                               Password = b.Password,
+                               //UserName = b.UserName,
+                               //Password = b.Password,
                                IsDoctor = b.IsDoctor
                            };
             return UserInfo;
@@ -84,46 +84,56 @@ namespace EHRWEBAPI.Controllers
                     throw;
                 }
             }
-
             return StatusCode(HttpStatusCode.NoContent);
         }
-
+        
 
         // POST: api/Users
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        [ResponseType(typeof(UserDetails))]
+        public async Task<UserDetails/*IHttpActionResult*/> PostUser(User user)
         {
             if (!ModelState.IsValid)
             {
                 // return BadRequest(ModelState);
                 return null;
             }
-            string salt = null;
-
+            
             var contentType = Request.Content.Headers.ContentType.MediaType;
             var requestParams = Request.Content.ReadAsStringAsync().Result;
             if (contentType == "application/json")
             {
-                Passusername1 PU = JsonConvert.DeserializeObject<Passusername1>(requestParams);
+                List<SaltDetails> listSalt = new List<SaltDetails>();
+                
+                var userInfo = db.Users.FirstOrDefault(c => c.UserName == user.UserName);
 
-                PU.username;
-                string Key = SHA1(SHA1((password.Text + usename.Text));
-
-
+                if (userInfo == null)
+                {
+                    //return (null);
+                    return null;
+                }
+                var saltFromDatabase = userInfo.Salt;
+                
+                var Inputhash = user.Password + saltFromDatabase ;
+                string saltedpassword = SHA1(SHA1(Inputhash));
+            
+                var userInfo1 = db.Users.FirstOrDefault(c => (c.UserName == user.UserName) && (c.Password == saltedpassword));
+                if (userInfo == null)
+                {
+                    //return (null);
+                    return null ;
+                }
+                UserDetails userDetails = new UserDetails();
+                userDetails.PersonID =userInfo1.PersonID;
+                userDetails.IsDoctor= userInfo1.IsDoctor;
+                return userDetails;
             }
             else
             {
-                return  Ok(HttpStatusCode.UnsupportedMediaType);     // check this again
+                return null; // Ok(HttpStatusCode.UnsupportedMediaType);    // check it 
             }
-            
-            
-           //  db.Users.Add(user);
-           //  await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
         }
 
-
+        
 
         public string SHA1(string Salt)
         {
@@ -137,11 +147,7 @@ namespace EHRWEBAPI.Controllers
 
             return sb.ToString();
         }
-        public class Passusername1
-        {
-            string username;
-            string password;
-        }
+
 
 
         /*
@@ -160,6 +166,7 @@ namespace EHRWEBAPI.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
         }          */
+
 
         // DELETE: api/Users/5
         [ResponseType(typeof(User))]

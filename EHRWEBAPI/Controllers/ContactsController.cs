@@ -17,16 +17,37 @@ namespace EHRWEBAPI.Controllers
     {
         private EHRsystemEntities db = new EHRsystemEntities();
 
+        [Route("api/YOURCONTROLLER/{Personid}/{Contacid}")]
+        [HttpGet]
+        [ResponseType(typeof(Contact))]
+        public IQueryable<Contact> GetContacts1(int Personid, int Contacid)
+        {
+             //return db.Contacts;
+            return(db.Contacts.Where(c => (c.PersonId == Personid) && (c.Contactid == Contacid) ) ) ;
+        }
+
+        [Route("api/YOURCONTROLLER/{Personid}")]
+        [HttpGet]
+        [ResponseType(typeof(Contact))]
+        public IQueryable<Contact> GetContacts2(int Personid)
+        {
+            //return db.Contacts;
+            return (db.Contacts.Where(c => (c.PersonId == Personid) ));
+        }
+        
+
         // GET: api/Contacts
         public IQueryable<Contact> GetContacts()
         {
             return db.Contacts;
+            
         }
-
+        
         // GET: api/Contacts/5
         [ResponseType(typeof(Contact))]
         public async Task<IHttpActionResult> GetContact(int id)
         {
+            
             Contact contact = await db.Contacts.FindAsync(id);
             if (contact == null)
             {
@@ -34,7 +55,9 @@ namespace EHRWEBAPI.Controllers
             }
 
             return Ok(contact);
+            
         }
+        
 
         // PUT: api/Contacts/5
         [ResponseType(typeof(void))]

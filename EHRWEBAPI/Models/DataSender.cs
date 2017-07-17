@@ -18,11 +18,10 @@ namespace EHRWEBAPI.Models
         public Nullable<int> PersonID { get; set; }
         public Nullable<int> ReseiverID { get; set; }
         public string Text { get; set; }
-        public string Date { get; set; }
-        public Nullable<System.Guid> photoid { get; set; }
         public string PictureInfo { get; set; }
         public byte[] Picture { get; set; }
+        public string Date { get; set; }
     
-        public virtual Demographic Demographic { get; set; }
+        public virtual Demographic Demographic {internal get; set; }
     }
 }

@@ -25,16 +25,16 @@ namespace EHRWEBAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Treat_Medicines> Treat_Medicines { get; set; }
         public virtual DbSet<Communication> Communications { get; set; }
+        public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Demographic> Demographics { get; set; }
         public virtual DbSet<DIagnosi> DIagnosis { get; set; }
         public virtual DbSet<DocType> DocTypes { get; set; }
-        public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Treat_Medicines> Treat_Medicines { get; set; }
-        public virtual DbSet<Visit> Visits { get; set; }
-        public virtual DbSet<Contact> Contacts { get; set; }
-        public virtual DbSet<DataSender> DataSenders { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
+        public virtual DbSet<Visit> Visits { get; set; }
+        public virtual DbSet<DataSender> DataSenders { get; set; }
     }
 }

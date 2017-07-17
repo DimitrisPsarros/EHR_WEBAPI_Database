@@ -22,6 +22,6 @@ namespace EHRWEBAPI.Models
         public string Key { get; set; }
         public string Salt { get; set; }
     
-        public virtual Demographic Demographic { get; set; }
+        public virtual Demographic Demographic {internal get; set; }
     }
 }

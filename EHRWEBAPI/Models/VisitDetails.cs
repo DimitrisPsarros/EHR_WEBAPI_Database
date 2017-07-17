@@ -7,7 +7,7 @@ namespace EHRWEBAPI.Models
 {
     public class VisitDetails
     {
-        public string Date { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public int DoctorPersonID { get; set; }
         public Nullable<int> PersonID { get; set; }
         public int NumberOfVisit { get; set; }

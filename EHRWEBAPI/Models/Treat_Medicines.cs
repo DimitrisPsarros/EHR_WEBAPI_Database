@@ -19,6 +19,6 @@ namespace EHRWEBAPI.Models
         public string ATC_CODES { get; set; }
         public string Dosage { get; set; }
     
-        public virtual Visit Visit { get; set; }
+        public virtual Visit Visit {internal get; set; }
     }
 }

@@ -19,6 +19,6 @@ namespace EHRWEBAPI.Models
         public string Description { get; set; }
         public string ICD_CODE { get; set; }
     
-        public virtual Visit Visit { get; set; }
+        public virtual Visit Visit {internal get; set; }
     }
 }

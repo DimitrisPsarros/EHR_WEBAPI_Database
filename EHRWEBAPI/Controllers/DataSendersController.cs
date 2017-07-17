@@ -11,12 +11,61 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using EHRWEBAPI.Models;
 using System.IO;
+using System.Web.Hosting;
+using System.Net.Http.Headers;
 
 namespace EHRWEBAPI.Controllers
 {
     public class DataSendersController : ApiController
     {
         private EHRsystemEntities db = new EHRsystemEntities();
+
+
+        [Route("api/Messages1/{Personid}/{Contacid}")]
+        [HttpGet]
+        [ResponseType(typeof(MessagesChat))]
+        public IQueryable<MessagesChat> GetMessages(int Personid, int Contacid)
+        {
+            var photodata = from b in db.DataSenders.
+                            Where( c => ( ( ( c.PersonID == Personid ) && ( c.ReseiverID == Contacid ) ) || ( ( c.PersonID == Contacid ) && ( c.ReseiverID == Personid) ) )  &&  (c.Picture == null) && (c.PictureInfo == null))
+                            select new MessagesChat()
+                            {
+                                PersonID = b.PersonID,
+                                ReseiverID = b.ReseiverID,
+                                Text = b.Text,
+                                IsMe = ( b.PersonID == Personid )
+                            };
+            return photodata;
+         }
+
+        [Route("api/Messages2/{Personid}/{Contacid}")]
+        [HttpGet]
+        [ResponseType(typeof(ImagesIDs))]
+        public IQueryable<ImagesIDs> GetMessages2(int Personid, int Contacid)
+        {
+            var photodata = from b in db.DataSenders.
+                            Where(c => (((c.PersonID == Personid) && (c.ReseiverID == Contacid) && (c.Picture != null)) || ((c.PersonID == Contacid) && (c.ReseiverID == Personid) && (c.Picture != null))) )
+                            select new ImagesIDs()
+                            {
+                                DataSenderId =b.DataSenderID
+                            };
+            return photodata;
+        }
+
+        [Route("api/Messages23/{id}")]
+        [HttpGet]
+        [ResponseType(typeof(ImagesChat))]
+        public IQueryable<ImagesChat> GetMessages23(int DatasenderId)
+        {
+            var photodata1 = from b in db.DataSenders.
+                            Where(c => c.DataSenderID == DatasenderId)
+                            select new ImagesChat()
+                            {
+                                Picture = b.Picture,
+                                Date = b.Date
+                            };
+            return photodata1;
+        }
 
         // GET: api/DataSenders
         public IQueryable<PhotoData> GetDataSenders()
@@ -32,19 +81,55 @@ namespace EHRWEBAPI.Controllers
             return photodata;
 
         }
+        
+        // GET: api/DataSenders/5
+        [ResponseType(typeof(ImagesChat))]
+        public async Task<IHttpActionResult> GetDataSender(int id)
+        {
+            //DataSender dataSender = await db.DataSenders.FindAsync(id);
+            //if (dataSender == null)
+            //{
+            //    return NotFound();
+            //}
 
+            //return Ok(dataSender);
+
+            var photodata1 = from b in db.DataSenders.
+                            Where(c => c.DataSenderID == id)
+                             select new ImagesChat()
+                             {
+                                 Picture = b.Picture,
+                                 Date = b.Date
+                             };
+            return Ok(photodata1);
+        }
+
+        
+
+            /*
         // GET: api/DataSenders/5
         [ResponseType(typeof(DataSender))]
-        public async Task<IHttpActionResult> GetDataSender(int id)
+        public async Task<HttpResponseMessage> GetDataSender(int id)
         {
             DataSender dataSender = await db.DataSenders.FindAsync(id);
             if (dataSender == null)
             {
-                return NotFound();
+                return null;
             }
+            byte[] pict = dataSender.Picture;
 
-            return Ok(dataSender);
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new ByteArrayContent(pict.ToArray());
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+            return result;
+
         }
+
+        */
+
+
+
+
 
         // PUT: api/DataSenders/5
         [ResponseType(typeof(void))]
@@ -81,22 +166,38 @@ namespace EHRWEBAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        
 
+        //////////////////////////////////////////// new code
 
+        [Route("api/Data/{id}")]                   // den tha pareis apo edw thn photo. tha thn pareis apo ton DataSenders
+        [HttpGet]
+        [ResponseType(typeof(DataSender))]
 
+        public async Task<HttpResponseMessage> GetImage(int id)
+        {
+            DataSender dataSender = await db.DataSenders.FindAsync(id);
 
+            byte[] pict = dataSender.Picture;
+            
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            result.Content = new ByteArrayContent(pict.ToArray());
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+            return result;
+            
+        }
 
-        /// //////////////////////////////new
-
-
+        //////////////////////////////// end new code
+       
 
         [Route("api/Dat")]
         [HttpPost]
         [ResponseType(typeof(DataSender))]
-        // public string
 
         public async Task<IHttpActionResult> UploadFile()
         {
+            byte[] result;
+            
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
@@ -104,68 +205,82 @@ namespace EHRWEBAPI.Controllers
             var provider1 = new MultipartMemoryStreamProvider();
             await Request.Content.ReadAsMultipartAsync(provider1);
 
+            DataSender datasender1 = new DataSender() ;
+
             await Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((tsk) =>
             {
                 // MultipartMemoryStreamProvider prvdr = tsk.Result;
                 // Stream InputStream;
-                int i = 1;
+                
+                int value = 1;
+
                 foreach (HttpContent ctnt in provider1.Contents)
                 {
-
-                    // You would get hold of the inner memory stream here
-
+                    
                     Stream stream = ctnt.ReadAsStreamAsync().Result;
-
-                    if (i == 1)
+                    
+                    switch (value)
                     {
-                        Stream InputStream = stream;
-                        byte[] result;
+                        case 1:
+
+                        Stream InputStream1 = stream;
                         using (var streamReader = new MemoryStream())
                         {
-                            InputStream.CopyTo(streamReader);
-                            result = streamReader.ToArray();
-                            DataSender datasender1 = new DataSender();
+                             InputStream1.CopyTo(streamReader);
+                             result = streamReader.ToArray();
+                          
+                             datasender1.Picture = result;
 
-                           
-                            datasender1.Picture = result;
-
-                            db.DataSenders.Add(datasender1);
-
-                            /*
+                            // db.DataSenders.Add(datasender1);
+                            
+                             /*
                              string strHex = BitConverter.ToString(result);
                              Guid id = new Guid(strHex)
-                             byte[] id = BitConverter.ToByte(result);
-                             Guid guid2 = new Guid(strHex);                              */
-
-                           // db.DataSenders.Add(datasender1);
-
-                            // await db.SaveChangesAsync();
-                            //  return CreatedAtRoute("DefaultApi", new { id = dIagnosis.DiagnosisID }, dIagnosis);
+                             byte[] id1 = BitConverter.ToByte(result);
+                             Guid guid2 = new Guid(strHex);                              
+                             */ 
                         }
-                        i = 0;
-                           
+                            break;
+                        case 2:
+
+                            Stream InputStream2 = stream;
+                            StreamReader reader2 = new StreamReader(InputStream2);
+                            string text2 = reader2.ReadToEnd();
+                            datasender1.PictureInfo = text2;      // apo string se text
+
+                            break;
+                        case 3: 
+
+                            Stream InputStream3 = stream;
+                            StreamReader reader3 = new StreamReader(InputStream3);
+                            string text3 = reader3.ReadToEnd();
+                        
+
+                            break;
+                        case 4:
+
+                            Stream InputStream4 = stream;
+                            StreamReader reader4 = new StreamReader(InputStream4);
+                            string text4 = reader4.ReadToEnd();
+                            datasender1.Date = text4;
+
+                            break; 
                     }
+                    value += 1;
                 }
             });
 
+            db.DataSenders.Add(datasender1);
+
             await db.SaveChangesAsync();
+            return CreatedAtRoute("DefaultApi", new { id = datasender1.DataSenderID }, datasender1);
 
-
-            //  return CreatedAtRoute("DefaultApi", new { id = dIagnosis.DiagnosisID }, dIagnosis);
-
-            return Ok();
+           // return Ok();
         }
+        
+        
 
-
-
-
-
-        //////////////////////////////////////   end   new 
-
-
-
-
-/*
+            
 
         // POST: api/DataSenders
         [ResponseType(typeof(DataSender))]
@@ -182,7 +297,7 @@ namespace EHRWEBAPI.Controllers
             return CreatedAtRoute("DefaultApi", new { id = dataSender.DataSenderID }, dataSender);
         }
 
-        */
+        
 
         // DELETE: api/DataSenders/5
         [ResponseType(typeof(DataSender))]
