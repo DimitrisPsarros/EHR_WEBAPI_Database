@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHRWEBAPI", "EHRWEBAPI\EHRWEBAPI.csproj", "{4F3357DC-978B-4FC7-BFD7-6C73E9638927}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database1", "Database1\Database1.sqlproj", "{79A982C6-465D-4441-92CD-FAAF30801CBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{4F3357DC-978B-4FC7-BFD7-6C73E9638927}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F3357DC-978B-4FC7-BFD7-6C73E9638927}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F3357DC-978B-4FC7-BFD7-6C73E9638927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79A982C6-465D-4441-92CD-FAAF30801CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79A982C6-465D-4441-92CD-FAAF30801CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79A982C6-465D-4441-92CD-FAAF30801CBB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{79A982C6-465D-4441-92CD-FAAF30801CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79A982C6-465D-4441-92CD-FAAF30801CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79A982C6-465D-4441-92CD-FAAF30801CBB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
