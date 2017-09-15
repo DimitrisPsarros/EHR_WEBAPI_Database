@@ -32,8 +32,15 @@ namespace EHRWEBAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(treat_Medicines);
+        }
+
+        [Route("api/Treat_Medicine/{Visitid}")]
+        [HttpGet]
+        [ResponseType(typeof(Treat_Medicines))]
+        public IQueryable<Treat_Medicines> GetMed(int Visitid)
+        {
+            return db.Treat_Medicines.Where(c => c.VisitID == Visitid);
         }
 
         // PUT: api/Treat_Medicines/5

@@ -13,44 +13,44 @@ using EHRWEBAPI.Models;
 
 namespace EHRWEBAPI.Controllers
 {
-    public class Users1Controller : ApiController
+    public class icd_codeController : ApiController
     {
         private EHRsystemEntities db = new EHRsystemEntities();
 
-        // GET: api/Users1
-        public IQueryable<User> GetUsers()
+        // GET: api/icd_code
+        public IQueryable<icd_code> Geticd_code()
         {
-            return db.Users;
+            return db.icd_code;
         }
 
-        // GET: api/Users1/5
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser(int id)
+        // GET: api/icd_code/5
+        [ResponseType(typeof(icd_code))]
+        public async Task<IHttpActionResult> Geticd_code(int id)
         {
-            User user = await db.Users.FindAsync(id);
-            if (user == null)
+            icd_code icd_code = await db.icd_code.FindAsync(id);
+            if (icd_code == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(icd_code);
         }
 
-        // PUT: api/Users1/5
+        // PUT: api/icd_code/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutUser(int id, User user)
+        public async Task<IHttpActionResult> Puticd_code(int id, icd_code icd_code)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.UserID)
+            if (id != icd_code.col0)
             {
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            db.Entry(icd_code).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +58,7 @@ namespace EHRWEBAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!icd_codeExists(id))
                 {
                     return NotFound();
                 }
@@ -71,35 +71,35 @@ namespace EHRWEBAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users1
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        // POST: api/icd_code
+        [ResponseType(typeof(icd_code))]
+        public async Task<IHttpActionResult> Posticd_code(icd_code icd_code)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
+            db.icd_code.Add(icd_code);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
+            return CreatedAtRoute("DefaultApi", new { id = icd_code.col0 }, icd_code);
         }
 
-        // DELETE: api/Users1/5
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> DeleteUser(int id)
+        // DELETE: api/icd_code/5
+        [ResponseType(typeof(icd_code))]
+        public async Task<IHttpActionResult> Deleteicd_code(int id)
         {
-            User user = await db.Users.FindAsync(id);
-            if (user == null)
+            icd_code icd_code = await db.icd_code.FindAsync(id);
+            if (icd_code == null)
             {
                 return NotFound();
             }
 
-            db.Users.Remove(user);
+            db.icd_code.Remove(icd_code);
             await db.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok(icd_code);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +111,9 @@ namespace EHRWEBAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool UserExists(int id)
+        private bool icd_codeExists(int id)
         {
-            return db.Users.Count(e => e.UserID == id) > 0;
+            return db.icd_code.Count(e => e.col0 == id) > 0;
         }
     }
 }

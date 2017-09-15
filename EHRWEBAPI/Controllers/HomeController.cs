@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EHRWEBAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,5 +15,6 @@ namespace EHRWEBAPI.Controllers
 
             return View();
         }
+
     }
 }

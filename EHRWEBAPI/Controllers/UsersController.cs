@@ -23,16 +23,12 @@ namespace EHRWEBAPI.Controllers
         // GET: api/Users
         public IQueryable<UserDetails> GetUsers()
         {
-          //  return db.Users;
-
+            // return db.Users;
             /////////////////// new code
             var UserInfo = from b in db.Users
-                           select new UserDetails()           // correct
+                           select new UserDetails()        
                            {
-                               //UserID = b.UserID,
                                PersonID = b.PersonID,
-                               //UserName = b.UserName,
-                               //Password = b.Password,
                                IsDoctor = b.IsDoctor
                            };
             return UserInfo;
@@ -90,11 +86,11 @@ namespace EHRWEBAPI.Controllers
 
         // POST: api/Users
         [ResponseType(typeof(UserDetails))]
-        public async Task<UserDetails/*IHttpActionResult*/> PostUser(User user)
+        public async Task<UserDetails> PostUser(User user)
         {
             if (!ModelState.IsValid)
             {
-                // return BadRequest(ModelState);
+                 //return BadRequest(ModelState);
                 return null;
             }
             
@@ -108,7 +104,6 @@ namespace EHRWEBAPI.Controllers
 
                 if (userInfo == null)
                 {
-                    //return (null);
                     return null;
                 }
                 var saltFromDatabase = userInfo.Salt;
@@ -116,10 +111,9 @@ namespace EHRWEBAPI.Controllers
                 var Inputhash = user.Password + saltFromDatabase ;
                 string saltedpassword = SHA1(SHA1(Inputhash));
             
-                var userInfo1 = db.Users.FirstOrDefault(c => (c.UserName == user.UserName) && (c.Password == saltedpassword));
-                if (userInfo == null)
+                var userInfo1 = db.Users.FirstOrDefault(c => (c.UserName == user.UserName) &&  (c.Password == saltedpassword) );
+                if (userInfo1 == null)
                 {
-                    //return (null);
                     return null ;
                 }
                 UserDetails userDetails = new UserDetails();
@@ -132,9 +126,6 @@ namespace EHRWEBAPI.Controllers
                 return null; // Ok(HttpStatusCode.UnsupportedMediaType);    // check it 
             }
         }
-
-        
-
         public string SHA1(string Salt)
         {
             byte[] hash;
@@ -147,9 +138,7 @@ namespace EHRWEBAPI.Controllers
 
             return sb.ToString();
         }
-
-
-
+        
         /*
         // POST: api/Users
         [ResponseType(typeof(User))]
@@ -165,9 +154,9 @@ namespace EHRWEBAPI.Controllers
             await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
-        }          */
-
-
+        }         
+        */
+        
         // DELETE: api/Users/5
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> DeleteUser(int id)

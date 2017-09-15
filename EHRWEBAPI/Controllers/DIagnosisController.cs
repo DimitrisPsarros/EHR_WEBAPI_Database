@@ -36,6 +36,14 @@ namespace EHRWEBAPI.Controllers
             return Ok(dIagnosi);
         }
 
+        [Route("api/Diagnosi/{Visitid}")]
+        [HttpGet]
+        [ResponseType(typeof(DIagnosi))]
+        public IQueryable<DIagnosi> GetDiagn(int Visitid)
+        {
+            return db.DIagnosis.Where(c => c.VisitID == Visitid);
+        }
+
         // PUT: api/DIagnosis/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutDIagnosi(int id, DIagnosi dIagnosi)

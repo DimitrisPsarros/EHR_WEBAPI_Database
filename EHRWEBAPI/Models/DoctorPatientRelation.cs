@@ -12,14 +12,14 @@ namespace EHRWEBAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Contact
+    public partial class DoctorPatientRelation
     {
-        public int ContactsID { get; set; }
-        public Nullable<int> PersonId { get; set; }
-        public Nullable<int> Contactid { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int RelationID { get; set; }
+        public Nullable<int> PatientID { get; set; }
+        public Nullable<int> DoctorID { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
     
-        public virtual Demographic Demographic {internal get; set; }
+        public virtual Doctor Doctor { get; set; }
+        public virtual Patient Patient { get; set; }
     }
 }

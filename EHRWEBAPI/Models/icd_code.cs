@@ -12,25 +12,31 @@ namespace EHRWEBAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Visit
+    public partial class icd_code
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Visit()
+        public icd_code()
         {
-            this.Treat_Medicines = new HashSet<Treat_Medicines>();
             this.DIagnosis = new HashSet<DIagnosi>();
         }
     
-        public int VisitID { get; set; }
-        public int DoctorPersonID { get; set; }
-        public Nullable<int> PersonID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
+        public int col0 { get; set; }
+        public int col1 { get; set; }
+        public string col2 { get; set; }
+        public string col3 { get; set; }
+        public Nullable<int> col4 { get; set; }
+        public string col5 { get; set; }
+        public string col6 { get; set; }
+        public string col7 { get; set; }
+        public string col8 { get; set; }
+        public string col9 { get; set; }
+        public string col10 { get; set; }
+        public string col11 { get; set; }
+        public string col12 { get; set; }
+        public string col13 { get; set; }
+        public string col14 { get; set; }
     
-        public virtual Doctor Doctor { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Treat_Medicines> Treat_Medicines {internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DIagnosi> DIagnosis {internal get; set; }
-        public virtual Patient Patient {internal get; set; }
     }
 }

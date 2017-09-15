@@ -19,9 +19,6 @@ namespace EHRWEBAPI.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool IsDoctor { get; set; }
-        public string Key { get; set; }
         public string Salt { get; set; }
-    
-        public virtual Demographic Demographic {internal get; set; }
     }
 }

@@ -183,46 +183,53 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AllergiesController.cs" />
     <Compile Include="Controllers\CommunicationsController.cs" />
-    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\DataSendersController.cs" />
     <Compile Include="Controllers\DemographicsController.cs" />
     <Compile Include="Controllers\DIagnosisController.cs" />
-    <Compile Include="Controllers\DocTypesController.cs" />
-    <Compile Include="Controllers\Documents1Controller.cs" />
-    <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\DoctorPatientRelationsController.cs" />
+    <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\icd_chaptersController.cs" />
+    <Compile Include="Controllers\icd_codeController.cs" />
     <Compile Include="Controllers\Treat_MedicinesController.cs" />
-    <Compile Include="Controllers\Users1Controller.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VisitsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Allergy.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Communication.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CommunicationsDetails.cs" />
-    <Compile Include="Models\Contact.cs">
+    <Compile Include="Models\ContactId.cs" />
+    <Compile Include="Models\icd_chapters.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\icd_code.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Peritta\ContactsID.cs" />
     <Compile Include="Models\DataSender.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Demographic.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DemographicsDetails.cs" />
     <Compile Include="Models\DIagnosi.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DocType.cs">
+    <Compile Include="Models\Doctor.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Document.cs">
+    <Compile Include="Models\DoctorPatientRelation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\friends.cs" />
+    <Compile Include="Models\FullNames.cs" />
     <Compile Include="Models\ImagesChat.cs" />
     <Compile Include="Models\ImagesIDs.cs" />
     <Compile Include="Models\MessagesChat.cs" />
@@ -241,7 +248,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\New_Messages.cs" />
     <Compile Include="Models\Passusername.cs" />
+    <Compile Include="Models\Patient.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PhotoData.cs" />
     <Compile Include="Models\SaltDetails.cs" />
     <Compile Include="Models\sysdiagram.cs">

@@ -15,13 +15,17 @@ namespace EHRWEBAPI.Models
     public partial class DataSender
     {
         public int DataSenderID { get; set; }
-        public Nullable<int> PersonID { get; set; }
-        public Nullable<int> ReseiverID { get; set; }
+        public Nullable<int> PatientID { get; set; }
+        public Nullable<int> DoctorID { get; set; }
+        public Nullable<int> Sender { get; set; }
         public string Text { get; set; }
         public string PictureInfo { get; set; }
         public byte[] Picture { get; set; }
-        public string Date { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<bool> Seen { get; set; }
+        public Nullable<bool> Send { get; set; }
     
-        public virtual Demographic Demographic {internal get; set; }
+        public virtual Doctor Doctor {internal get; set; }
+        public virtual Patient Patient {internal get; set; }
     }
 }

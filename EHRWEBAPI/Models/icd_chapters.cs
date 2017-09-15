@@ -12,18 +12,18 @@ namespace EHRWEBAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DocType
+    public partial class icd_chapters
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DocType()
+        public icd_chapters()
         {
-            this.Documents = new HashSet<Document>();
+            this.DIagnosis = new HashSet<DIagnosi>();
         }
     
-        public int Document_typeID { get; set; }
-        public string Type { get; set; }
+        public string col1 { get; set; }
+        public string col2 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Document> Documents { get; set; }
+        public virtual ICollection<DIagnosi> DIagnosis {internal get; set; }
     }
 }

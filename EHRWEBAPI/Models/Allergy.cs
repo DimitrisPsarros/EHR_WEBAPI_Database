@@ -12,15 +12,14 @@ namespace EHRWEBAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Document
+    public partial class Allergy
     {
-        public int DocumentsID { get; set; }
-        public Nullable<int> PersonID { get; set; }
-        public byte[] file { get; set; }
-        public Nullable<int> Document_TypeID { get; set; }
-        public string Date { get; set; }
+        public int AllergyID { get; set; }
+        public Nullable<int> PatientID { get; set; }
+        public string Allergy1 { get; set; }
+        public string Reaction { get; set; }
+        public string Severity { get; set; }
     
-        public virtual Demographic Demographic { get; set; }
-        public virtual DocType DocType { get; set; }
+        public virtual Patient Patient {internal get; set; }
     }
 }

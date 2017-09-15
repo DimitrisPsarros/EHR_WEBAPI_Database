@@ -19,6 +19,6 @@ namespace EHRWEBAPI.Models
         public string email { get; set; }
         public Nullable<int> Telephone { get; set; }
     
-        public virtual Demographic Demographic {internal get; set; }
+        public virtual Patient Patient {internal get; set; }
     }
 }

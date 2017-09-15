@@ -21,9 +21,7 @@ namespace EHRWEBAPI.Controllers
         public IQueryable<Visit> GetVisits(int PersonId)    // call the web api as < /api/visits//?PersonId=1002  or 1001>
         {
             //return db.Visits;
-            
-            return db.Visits.Where(c => c.PersonID == PersonId);
-
+            return db.Visits.Where(c => c.PersonID == PersonId).OrderBy(c => c.Date);   // chronological order
         }
 
         // GET: api/Visits/5

@@ -17,8 +17,11 @@ namespace EHRWEBAPI.Models
         public int DiagnosisID { get; set; }
         public Nullable<int> VisitID { get; set; }
         public string Description { get; set; }
-        public string ICD_CODE { get; set; }
+        public Nullable<int> ICD_Code_Id { get; set; }
+        public string ICD_Chapter { get; set; }
     
         public virtual Visit Visit {internal get; set; }
+        public virtual icd_chapters icd_chapters {internal get; set; }
+        public virtual icd_code icd_code {internal get; set; }
     }
 }

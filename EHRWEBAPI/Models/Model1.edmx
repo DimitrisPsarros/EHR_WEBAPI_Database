@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="EHRsystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Allergies">
+          <Key>
+            <PropertyRef Name="AllergyID" />
+          </Key>
+          <Property Name="AllergyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientID" Type="int" />
+          <Property Name="Allergy" Type="nvarchar" MaxLength="250" />
+          <Property Name="Reaction" Type="nvarchar" MaxLength="250" />
+          <Property Name="Severity" Type="nvarchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="Communication">
           <Key>
             <PropertyRef Name="CommunicationID" />
@@ -14,41 +24,20 @@
           <Property Name="email" Type="text" />
           <Property Name="Telephone" Type="int" />
         </EntityType>
-        <EntityType Name="Contacts">
-          <Key>
-            <PropertyRef Name="ContactsID" />
-          </Key>
-          <Property Name="ContactsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PersonId" Type="int" />
-          <Property Name="Contactid" Type="int" />
-          <Property Name="FirstName" Type="ntext" />
-          <Property Name="LastName" Type="ntext" />
-        </EntityType>
         <EntityType Name="DataSender">
           <Key>
             <PropertyRef Name="DataSenderID" />
           </Key>
           <Property Name="DataSenderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PersonID" Type="int" />
-          <Property Name="ReseiverID" Type="int" />
+          <Property Name="PatientID" Type="int" />
+          <Property Name="DoctorID" Type="int" />
+          <Property Name="Sender" Type="int" />
           <Property Name="Text" Type="text" />
           <Property Name="PictureInfo" Type="text" />
           <Property Name="Picture" Type="varbinary(max)" />
-          <Property Name="Date" Type="ntext" />
-        </EntityType>
-        <EntityType Name="Demographics">
-          <Key>
-            <PropertyRef Name="PERSONID" />
-          </Key>
-          <Property Name="PERSONID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Sex" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="StreetName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="StreetNumber" Type="int" Nullable="false" />
-          <Property Name="Birthday" Type="text" Nullable="false" />
+          <Property Name="Date" Type="datetime2" Precision="7" />
+          <Property Name="Seen" Type="bit" />
+          <Property Name="Send" Type="bit" />
         </EntityType>
         <EntityType Name="DIagnosis">
           <Key>
@@ -57,24 +46,67 @@
           <Property Name="DiagnosisID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="VisitID" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
-          <Property Name="ICD-CODE" Type="nchar" MaxLength="10" />
+          <Property Name="ICD_Code_Id" Type="int" />
+          <Property Name="ICD_Chapter" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="DocType">
+        <EntityType Name="DoctorPatientRelation">
           <Key>
-            <PropertyRef Name="Document_typeID" />
+            <PropertyRef Name="RelationID" />
           </Key>
-          <Property Name="Document_typeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Type" Type="text" />
+          <Property Name="RelationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientID" Type="int" />
+          <Property Name="DoctorID" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
         </EntityType>
-        <EntityType Name="Documents">
+        <EntityType Name="Doctors">
           <Key>
-            <PropertyRef Name="DocumentsID" />
+            <PropertyRef Name="DoctorID" />
           </Key>
-          <Property Name="DocumentsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PersonID" Type="int" />
-          <Property Name="file" Type="varbinary(max)" />
-          <Property Name="Document_TypeID" Type="int" />
-          <Property Name="Date" Type="ntext" />
+          <Property Name="DoctorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Speciality" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="icd_chapters">
+          <Key>
+            <PropertyRef Name="col1" />
+          </Key>
+          <Property Name="col1" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="col2" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="icd_code">
+          <Key>
+            <PropertyRef Name="col0" />
+          </Key>
+          <Property Name="col0" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="col1" Type="int" Nullable="false" />
+          <Property Name="col2" Type="varchar" MaxLength="1" />
+          <Property Name="col3" Type="varchar" MaxLength="1" />
+          <Property Name="col4" Type="int" />
+          <Property Name="col5" Type="varchar" MaxLength="3" />
+          <Property Name="col6" Type="varchar" MaxLength="6" />
+          <Property Name="col7" Type="varchar" MaxLength="5" />
+          <Property Name="col8" Type="varchar" MaxLength="4" />
+          <Property Name="col9" Type="varchar" MaxLength="185" Nullable="false" />
+          <Property Name="col10" Type="varchar" MaxLength="5" />
+          <Property Name="col11" Type="varchar" MaxLength="5" />
+          <Property Name="col12" Type="varchar" MaxLength="5" />
+          <Property Name="col13" Type="varchar" MaxLength="5" />
+          <Property Name="col14" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="PatientID" />
+          </Key>
+          <Property Name="PatientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StreetName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StreetNumber" Type="int" Nullable="false" />
+          <Property Name="Birthday" Type="date" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -101,11 +133,10 @@
           </Key>
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PersonID" Type="int" />
-          <Property Name="UserName" Type="text" Nullable="false" />
-          <Property Name="Password" Type="text" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsDoctor" Type="bit" Nullable="false" />
-          <Property Name="Key" Type="text" />
-          <Property Name="Salt" Type="text" />
+          <Property Name="Salt" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Visit">
           <Key>
@@ -114,42 +145,77 @@
           <Property Name="VisitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DoctorPersonID" Type="int" Nullable="false" />
           <Property Name="PersonID" Type="int" />
-          <Property Name="NumberOfVisit" Type="int" Nullable="false" />
-          <Property Name="Date" Type="ntext" />
+          <Property Name="Date" Type="datetime2" Precision="7" />
         </EntityType>
+        <Association Name="FK_Allergies_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
+          <End Role="Allergies" Type="Self.Allergies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Allergies">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Communication_Demographics">
-          <End Role="Demographics" Type="Self.Demographics" Multiplicity="0..1" />
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
           <End Role="Communication" Type="Self.Communication" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographics">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
             </Principal>
             <Dependent Role="Communication">
               <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Contacts_Demographics">
-          <End Role="Demographics" Type="Self.Demographics" Multiplicity="0..1" />
-          <End Role="Contacts" Type="Self.Contacts" Multiplicity="*" />
+        <Association Name="FK_DataSender_Doctors">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="0..1" />
+          <End Role="DataSender" Type="Self.DataSender" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographics">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Doctors">
+              <PropertyRef Name="DoctorID" />
             </Principal>
-            <Dependent Role="Contacts">
-              <PropertyRef Name="PersonId" />
+            <Dependent Role="DataSender">
+              <PropertyRef Name="DoctorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DataSender_Demographics">
-          <End Role="Demographics" Type="Self.Demographics" Multiplicity="0..1" />
+        <Association Name="FK_DataSender_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
           <End Role="DataSender" Type="Self.DataSender" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographics">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
             </Principal>
             <Dependent Role="DataSender">
-              <PropertyRef Name="PersonID" />
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DIagnosis_icd_chapters">
+          <End Role="icd_chapters" Type="Self.icd_chapters" Multiplicity="0..1" />
+          <End Role="DIagnosis" Type="Self.DIagnosis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="icd_chapters">
+              <PropertyRef Name="col1" />
+            </Principal>
+            <Dependent Role="DIagnosis">
+              <PropertyRef Name="ICD_Chapter" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DIagnosis_icd_code">
+          <End Role="icd_code" Type="Self.icd_code" Multiplicity="0..1" />
+          <End Role="DIagnosis" Type="Self.DIagnosis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="icd_code">
+              <PropertyRef Name="col0" />
+            </Principal>
+            <Dependent Role="DIagnosis">
+              <PropertyRef Name="ICD_Code_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -165,27 +231,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Documents_Demographics">
-          <End Role="Demographics" Type="Self.Demographics" Multiplicity="0..1" />
-          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+        <Association Name="FK_DoctorPatientRelation_Demographics">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
+          <End Role="DoctorPatientRelation" Type="Self.DoctorPatientRelation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographics">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
             </Principal>
-            <Dependent Role="Documents">
-              <PropertyRef Name="PersonID" />
+            <Dependent Role="DoctorPatientRelation">
+              <PropertyRef Name="PatientID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Documents_DocType">
-          <End Role="DocType" Type="Self.DocType" Multiplicity="0..1" />
-          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+        <Association Name="FK_DoctorPatientRelation_Doctors">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="0..1" />
+          <End Role="DoctorPatientRelation" Type="Self.DoctorPatientRelation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DocType">
-              <PropertyRef Name="Document_typeID" />
+            <Principal Role="Doctors">
+              <PropertyRef Name="DoctorID" />
             </Principal>
-            <Dependent Role="Documents">
-              <PropertyRef Name="Document_TypeID" />
+            <Dependent Role="DoctorPatientRelation">
+              <PropertyRef Name="DoctorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -201,76 +267,90 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Users_Demographics">
-          <End Role="Demographics" Type="Self.Demographics" Multiplicity="0..1" />
-          <End Role="Users" Type="Self.Users" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Demographics">
-              <PropertyRef Name="PERSONID" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Visit_Demographics">
-          <End Role="Demographics" Type="Self.Demographics" Multiplicity="0..1" />
+          <End Role="Patients" Type="Self.Patients" Multiplicity="0..1" />
           <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographics">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
             </Principal>
             <Dependent Role="Visit">
               <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Visit_Doctors">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="1" />
+          <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="DoctorID" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="DoctorPersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="EHRsystemModelStoreContainer">
+          <EntitySet Name="Allergies" EntityType="Self.Allergies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Communication" EntityType="Self.Communication" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Contacts" EntityType="Self.Contacts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataSender" EntityType="Self.DataSender" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Demographics" EntityType="Self.Demographics" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DIagnosis" EntityType="Self.DIagnosis" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DocType" EntityType="Self.DocType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DoctorPatientRelation" EntityType="Self.DoctorPatientRelation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="icd_chapters" EntityType="Self.icd_chapters" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="icd_code" EntityType="Self.icd_code" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Treat-Medicines" EntityType="Self.Treat-Medicines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Visit" EntityType="Self.Visit" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Allergies_Patients" Association="Self.FK_Allergies_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Allergies" EntitySet="Allergies" />
+          </AssociationSet>
           <AssociationSet Name="FK_Communication_Demographics" Association="Self.FK_Communication_Demographics">
-            <End Role="Demographics" EntitySet="Demographics" />
+            <End Role="Patients" EntitySet="Patients" />
             <End Role="Communication" EntitySet="Communication" />
           </AssociationSet>
-          <AssociationSet Name="FK_Contacts_Demographics" Association="Self.FK_Contacts_Demographics">
-            <End Role="Demographics" EntitySet="Demographics" />
-            <End Role="Contacts" EntitySet="Contacts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DataSender_Demographics" Association="Self.FK_DataSender_Demographics">
-            <End Role="Demographics" EntitySet="Demographics" />
+          <AssociationSet Name="FK_DataSender_Doctors" Association="Self.FK_DataSender_Doctors">
+            <End Role="Doctors" EntitySet="Doctors" />
             <End Role="DataSender" EntitySet="DataSender" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DataSender_Patients" Association="Self.FK_DataSender_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="DataSender" EntitySet="DataSender" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DIagnosis_icd_chapters" Association="Self.FK_DIagnosis_icd_chapters">
+            <End Role="icd_chapters" EntitySet="icd_chapters" />
+            <End Role="DIagnosis" EntitySet="DIagnosis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DIagnosis_icd_code" Association="Self.FK_DIagnosis_icd_code">
+            <End Role="icd_code" EntitySet="icd_code" />
+            <End Role="DIagnosis" EntitySet="DIagnosis" />
           </AssociationSet>
           <AssociationSet Name="FK_DIagnosis_Visit" Association="Self.FK_DIagnosis_Visit">
             <End Role="Visit" EntitySet="Visit" />
             <End Role="DIagnosis" EntitySet="DIagnosis" />
           </AssociationSet>
-          <AssociationSet Name="FK_Documents_Demographics" Association="Self.FK_Documents_Demographics">
-            <End Role="Demographics" EntitySet="Demographics" />
-            <End Role="Documents" EntitySet="Documents" />
+          <AssociationSet Name="FK_DoctorPatientRelation_Demographics" Association="Self.FK_DoctorPatientRelation_Demographics">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="DoctorPatientRelation" EntitySet="DoctorPatientRelation" />
           </AssociationSet>
-          <AssociationSet Name="FK_Documents_DocType" Association="Self.FK_Documents_DocType">
-            <End Role="DocType" EntitySet="DocType" />
-            <End Role="Documents" EntitySet="Documents" />
+          <AssociationSet Name="FK_DoctorPatientRelation_Doctors" Association="Self.FK_DoctorPatientRelation_Doctors">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="DoctorPatientRelation" EntitySet="DoctorPatientRelation" />
           </AssociationSet>
           <AssociationSet Name="FK_Treat-Medicines_Visit" Association="Self.FK_Treat-Medicines_Visit">
             <End Role="Visit" EntitySet="Visit" />
             <End Role="Treat-Medicines" EntitySet="Treat-Medicines" />
           </AssociationSet>
-          <AssociationSet Name="FK_Users_Demographics" Association="Self.FK_Users_Demographics">
-            <End Role="Demographics" EntitySet="Demographics" />
-            <End Role="Users" EntitySet="Users" />
-          </AssociationSet>
           <AssociationSet Name="FK_Visit_Demographics" Association="Self.FK_Visit_Demographics">
-            <End Role="Demographics" EntitySet="Demographics" />
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Visit" EntitySet="Visit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_Doctors" Association="Self.FK_Visit_Doctors">
+            <End Role="Doctors" EntitySet="Doctors" />
             <End Role="Visit" EntitySet="Visit" />
           </AssociationSet>
         </EntityContainer>
@@ -281,51 +361,65 @@
         <EntityContainer Name="EHRsystemEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Treat_Medicines" EntityType="EHRsystemModel.Treat_Medicines" />
           <EntitySet Name="Communications" EntityType="EHRsystemModel.Communication" />
-          <EntitySet Name="Contacts" EntityType="EHRsystemModel.Contact" />
-          <EntitySet Name="Demographics" EntityType="EHRsystemModel.Demographic" />
-          <EntitySet Name="DIagnosis" EntityType="EHRsystemModel.DIagnosi" />
-          <EntitySet Name="DocTypes" EntityType="EHRsystemModel.DocType" />
           <EntitySet Name="sysdiagrams" EntityType="EHRsystemModel.sysdiagram" />
-          <EntitySet Name="Users" EntityType="EHRsystemModel.User" />
-          <AssociationSet Name="FK_Communication_Demographics" Association="EHRsystemModel.FK_Communication_Demographics">
-            <End Role="Demographic" EntitySet="Demographics" />
-            <End Role="Communication" EntitySet="Communications" />
+          <EntitySet Name="DoctorPatientRelations" EntityType="EHRsystemModel.DoctorPatientRelation" />
+          <EntitySet Name="Doctors" EntityType="EHRsystemModel.Doctor" />
+          <AssociationSet Name="FK_DoctorPatientRelation_Doctors" Association="EHRsystemModel.FK_DoctorPatientRelation_Doctors">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="DoctorPatientRelation" EntitySet="DoctorPatientRelations" />
           </AssociationSet>
-          <AssociationSet Name="FK_Contacts_Demographics" Association="EHRsystemModel.FK_Contacts_Demographics">
-            <End Role="Demographic" EntitySet="Demographics" />
-            <End Role="Contact" EntitySet="Contacts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Users_Demographics" Association="EHRsystemModel.FK_Users_Demographics">
-            <End Role="Demographic" EntitySet="Demographics" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
-          <EntitySet Name="Documents" EntityType="EHRsystemModel.Document" />
+          <EntitySet Name="Allergies" EntityType="EHRsystemModel.Allergy" />
           <EntitySet Name="Visits" EntityType="EHRsystemModel.Visit" />
-          <AssociationSet Name="FK_Documents_Demographics" Association="EHRsystemModel.FK_Documents_Demographics">
-            <End Role="Demographic" EntitySet="Demographics" />
-            <End Role="Document" EntitySet="Documents" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Visit_Demographics" Association="EHRsystemModel.FK_Visit_Demographics">
-            <End Role="Demographic" EntitySet="Demographics" />
+          <AssociationSet Name="FK_Visit_Doctors" Association="EHRsystemModel.FK_Visit_Doctors">
+            <End Role="Doctor" EntitySet="Doctors" />
             <End Role="Visit" EntitySet="Visits" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DIagnosis_Visit" Association="EHRsystemModel.FK_DIagnosis_Visit">
-            <End Role="Visit" EntitySet="Visits" />
-            <End Role="DIagnosi" EntitySet="DIagnosis" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Documents_DocType" Association="EHRsystemModel.FK_Documents_DocType">
-            <End Role="DocType" EntitySet="DocTypes" />
-            <End Role="Document" EntitySet="Documents" />
           </AssociationSet>
           <AssociationSet Name="FK_Treat_Medicines_Visit" Association="EHRsystemModel.FK_Treat_Medicines_Visit">
             <End Role="Visit" EntitySet="Visits" />
             <End Role="Treat_Medicines" EntitySet="Treat_Medicines" />
           </AssociationSet>
+          <EntitySet Name="DIagnosis" EntityType="EHRsystemModel.DIagnosi" />
+          <AssociationSet Name="FK_DIagnosis_Visit" Association="EHRsystemModel.FK_DIagnosis_Visit">
+            <End Role="Visit" EntitySet="Visits" />
+            <End Role="DIagnosi" EntitySet="DIagnosis" />
+          </AssociationSet>
+          <EntitySet Name="icd_chapters" EntityType="EHRsystemModel.icd_chapters" />
+          <EntitySet Name="icd_code" EntityType="EHRsystemModel.icd_code" />
+          <AssociationSet Name="FK_DIagnosis_icd_chapters" Association="EHRsystemModel.FK_DIagnosis_icd_chapters">
+            <End Role="icd_chapters" EntitySet="icd_chapters" />
+            <End Role="DIagnosi" EntitySet="DIagnosis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DIagnosis_icd_code" Association="EHRsystemModel.FK_DIagnosis_icd_code">
+            <End Role="icd_code" EntitySet="icd_code" />
+            <End Role="DIagnosi" EntitySet="DIagnosis" />
+          </AssociationSet>
           <EntitySet Name="DataSenders" EntityType="EHRsystemModel.DataSender" />
-          <AssociationSet Name="FK_DataSender_Demographics" Association="EHRsystemModel.FK_DataSender_Demographics">
-            <End Role="Demographic" EntitySet="Demographics" />
+          <AssociationSet Name="FK_DataSender_Doctors" Association="EHRsystemModel.FK_DataSender_Doctors">
+            <End Role="Doctor" EntitySet="Doctors" />
             <End Role="DataSender" EntitySet="DataSenders" />
           </AssociationSet>
+          <EntitySet Name="Patients" EntityType="EHRsystemModel.Patient" />
+          <AssociationSet Name="FK_Allergies_Patients" Association="EHRsystemModel.FK_Allergies_Patients">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Allergy" EntitySet="Allergies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Communication_Demographics" Association="EHRsystemModel.FK_Communication_Demographics">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Communication" EntitySet="Communications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DataSender_Patients" Association="EHRsystemModel.FK_DataSender_Patients">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="DataSender" EntitySet="DataSenders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DoctorPatientRelation_Demographics" Association="EHRsystemModel.FK_DoctorPatientRelation_Demographics">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="DoctorPatientRelation" EntitySet="DoctorPatientRelations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_Demographics" Association="EHRsystemModel.FK_Visit_Demographics">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Visit" EntitySet="Visits" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="EHRsystemModel.User" />
           </EntityContainer>
         <EntityType Name="Treat_Medicines">
           <Key>
@@ -345,56 +439,7 @@
           <Property Name="PersonID" Type="Int32" />
           <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Telephone" Type="Int32" />
-          <NavigationProperty Name="Demographic" Relationship="EHRsystemModel.FK_Communication_Demographics" FromRole="Communication" ToRole="Demographic" />
-        </EntityType>
-        <EntityType Name="Contact">
-          <Key>
-            <PropertyRef Name="ContactsID" />
-          </Key>
-          <Property Name="ContactsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PersonId" Type="Int32" />
-          <Property Name="Contactid" Type="Int32" />
-          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Demographic" Relationship="EHRsystemModel.FK_Contacts_Demographics" FromRole="Contact" ToRole="Demographic" />
-        </EntityType>
-        <EntityType Name="Demographic">
-          <Key>
-            <PropertyRef Name="PERSONID" />
-          </Key>
-          <Property Name="PERSONID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Sex" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StreetName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StreetNumber" Type="Int32" Nullable="false" />
-          <Property Name="Birthday" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Communications" Relationship="EHRsystemModel.FK_Communication_Demographics" FromRole="Demographic" ToRole="Communication" />
-          <NavigationProperty Name="Contacts" Relationship="EHRsystemModel.FK_Contacts_Demographics" FromRole="Demographic" ToRole="Contact" />
-          <NavigationProperty Name="Users" Relationship="EHRsystemModel.FK_Users_Demographics" FromRole="Demographic" ToRole="User" />
-          <NavigationProperty Name="Documents" Relationship="EHRsystemModel.FK_Documents_Demographics" FromRole="Demographic" ToRole="Document" />
-          <NavigationProperty Name="Visits" Relationship="EHRsystemModel.FK_Visit_Demographics" FromRole="Demographic" ToRole="Visit" />
-          <NavigationProperty Name="DataSenders" Relationship="EHRsystemModel.FK_DataSender_Demographics" FromRole="Demographic" ToRole="DataSender" />
-        </EntityType>
-        <EntityType Name="DIagnosi">
-          <Key>
-            <PropertyRef Name="DiagnosisID" />
-          </Key>
-          <Property Name="DiagnosisID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="VisitID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ICD_CODE" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Visit" Relationship="EHRsystemModel.FK_DIagnosis_Visit" FromRole="DIagnosi" ToRole="Visit" />
-        </EntityType>
-        <EntityType Name="DocType">
-          <Key>
-            <PropertyRef Name="Document_typeID" />
-          </Key>
-          <Property Name="Document_typeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Documents" Relationship="EHRsystemModel.FK_Documents_DocType" FromRole="DocType" ToRole="Document" />
+          <NavigationProperty Name="Patient" Relationship="EHRsystemModel.FK_Communication_Demographics" FromRole="Communication" ToRole="Patient" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -406,66 +451,51 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="User">
+        <EntityType Name="DoctorPatientRelation">
           <Key>
-            <PropertyRef Name="UserID" />
+            <PropertyRef Name="RelationID" />
           </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PersonID" Type="Int32" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="IsDoctor" Type="Boolean" Nullable="false" />
-          <Property Name="Key" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Salt" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Demographic" Relationship="EHRsystemModel.FK_Users_Demographics" FromRole="User" ToRole="Demographic" />
+          <Property Name="RelationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientID" Type="Int32" />
+          <Property Name="DoctorID" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Doctor" Relationship="EHRsystemModel.FK_DoctorPatientRelation_Doctors" FromRole="DoctorPatientRelation" ToRole="Doctor" />
+          <NavigationProperty Name="Patient" Relationship="EHRsystemModel.FK_DoctorPatientRelation_Demographics" FromRole="DoctorPatientRelation" ToRole="Patient" />
         </EntityType>
-        <Association Name="FK_Communication_Demographics">
-          <End Type="EHRsystemModel.Demographic" Role="Demographic" Multiplicity="0..1" />
-          <End Type="EHRsystemModel.Communication" Role="Communication" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Demographic">
-              <PropertyRef Name="PERSONID" />
-            </Principal>
-            <Dependent Role="Communication">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Contacts_Demographics">
-          <End Type="EHRsystemModel.Demographic" Role="Demographic" Multiplicity="0..1" />
-          <End Type="EHRsystemModel.Contact" Role="Contact" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Demographic">
-              <PropertyRef Name="PERSONID" />
-            </Principal>
-            <Dependent Role="Contact">
-              <PropertyRef Name="PersonId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Users_Demographics">
-          <End Type="EHRsystemModel.Demographic" Role="Demographic" Multiplicity="0..1" />
-          <End Type="EHRsystemModel.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Demographic">
-              <PropertyRef Name="PERSONID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Document">
+        <EntityType Name="Doctor">
           <Key>
-            <PropertyRef Name="DocumentsID" />
+            <PropertyRef Name="DoctorID" />
           </Key>
-          <Property Name="DocumentsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PersonID" Type="Int32" />
-          <Property Name="file" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="Document_TypeID" Type="Int32" />
-          <Property Name="Date" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Demographic" Relationship="EHRsystemModel.FK_Documents_Demographics" FromRole="Document" ToRole="Demographic" />
-          <NavigationProperty Name="DocType" Relationship="EHRsystemModel.FK_Documents_DocType" FromRole="Document" ToRole="DocType" />
+          <Property Name="DoctorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Speciality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DoctorPatientRelations" Relationship="EHRsystemModel.FK_DoctorPatientRelation_Doctors" FromRole="Doctor" ToRole="DoctorPatientRelation" />
+          <NavigationProperty Name="Visits" Relationship="EHRsystemModel.FK_Visit_Doctors" FromRole="Doctor" ToRole="Visit" />
+          <NavigationProperty Name="DataSenders" Relationship="EHRsystemModel.FK_DataSender_Doctors" FromRole="Doctor" ToRole="DataSender" />
+        </EntityType>
+        <Association Name="FK_DoctorPatientRelation_Doctors">
+          <End Type="EHRsystemModel.Doctor" Role="Doctor" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.DoctorPatientRelation" Role="DoctorPatientRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="DoctorID" />
+            </Principal>
+            <Dependent Role="DoctorPatientRelation">
+              <PropertyRef Name="DoctorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Allergy">
+          <Key>
+            <PropertyRef Name="AllergyID" />
+          </Key>
+          <Property Name="AllergyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientID" Type="Int32" />
+          <Property Name="Allergy1" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Reaction" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Severity" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Patient" Relationship="EHRsystemModel.FK_Allergies_Patients" FromRole="Allergy" ToRole="Patient" />
         </EntityType>
         <EntityType Name="Visit">
           <Key>
@@ -474,57 +504,21 @@
           <Property Name="VisitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DoctorPersonID" Type="Int32" Nullable="false" />
           <Property Name="PersonID" Type="Int32" />
-          <Property Name="NumberOfVisit" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Demographic" Relationship="EHRsystemModel.FK_Visit_Demographics" FromRole="Visit" ToRole="Demographic" />
-          <NavigationProperty Name="DIagnosis" Relationship="EHRsystemModel.FK_DIagnosis_Visit" FromRole="Visit" ToRole="DIagnosi" />
+          <Property Name="Date" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Doctor" Relationship="EHRsystemModel.FK_Visit_Doctors" FromRole="Visit" ToRole="Doctor" />
           <NavigationProperty Name="Treat_Medicines" Relationship="EHRsystemModel.FK_Treat_Medicines_Visit" FromRole="Visit" ToRole="Treat_Medicines" />
+          <NavigationProperty Name="DIagnosis" Relationship="EHRsystemModel.FK_DIagnosis_Visit" FromRole="Visit" ToRole="DIagnosi" />
+          <NavigationProperty Name="Patient" Relationship="EHRsystemModel.FK_Visit_Demographics" FromRole="Visit" ToRole="Patient" />
         </EntityType>
-        <Association Name="FK_Documents_Demographics">
-          <End Type="EHRsystemModel.Demographic" Role="Demographic" Multiplicity="0..1" />
-          <End Type="EHRsystemModel.Document" Role="Document" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Demographic">
-              <PropertyRef Name="PERSONID" />
-            </Principal>
-            <Dependent Role="Document">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Visit_Demographics">
-          <End Type="EHRsystemModel.Demographic" Role="Demographic" Multiplicity="0..1" />
+        <Association Name="FK_Visit_Doctors">
+          <End Type="EHRsystemModel.Doctor" Role="Doctor" Multiplicity="1" />
           <End Type="EHRsystemModel.Visit" Role="Visit" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographic">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Doctor">
+              <PropertyRef Name="DoctorID" />
             </Principal>
             <Dependent Role="Visit">
-              <PropertyRef Name="PersonID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DIagnosis_Visit">
-          <End Type="EHRsystemModel.Visit" Role="Visit" Multiplicity="0..1" />
-          <End Type="EHRsystemModel.DIagnosi" Role="DIagnosi" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Visit">
-              <PropertyRef Name="VisitID" />
-            </Principal>
-            <Dependent Role="DIagnosi">
-              <PropertyRef Name="VisitID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Documents_DocType">
-          <End Type="EHRsystemModel.DocType" Role="DocType" Multiplicity="0..1" />
-          <End Type="EHRsystemModel.Document" Role="Document" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DocType">
-              <PropertyRef Name="Document_typeID" />
-            </Principal>
-            <Dependent Role="Document">
-              <PropertyRef Name="Document_TypeID" />
+              <PropertyRef Name="DoctorPersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -540,31 +534,203 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="DIagnosi">
+          <Key>
+            <PropertyRef Name="DiagnosisID" />
+          </Key>
+          <Property Name="DiagnosisID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VisitID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ICD_Code_Id" Type="Int32" />
+          <Property Name="ICD_Chapter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Visit" Relationship="EHRsystemModel.FK_DIagnosis_Visit" FromRole="DIagnosi" ToRole="Visit" />
+          <NavigationProperty Name="icd_chapters" Relationship="EHRsystemModel.FK_DIagnosis_icd_chapters" FromRole="DIagnosi" ToRole="icd_chapters" />
+          <NavigationProperty Name="icd_code" Relationship="EHRsystemModel.FK_DIagnosis_icd_code" FromRole="DIagnosi" ToRole="icd_code" />
+        </EntityType>
+        <Association Name="FK_DIagnosis_Visit">
+          <End Type="EHRsystemModel.Visit" Role="Visit" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.DIagnosi" Role="DIagnosi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visit">
+              <PropertyRef Name="VisitID" />
+            </Principal>
+            <Dependent Role="DIagnosi">
+              <PropertyRef Name="VisitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="icd_chapters">
+          <Key>
+            <PropertyRef Name="col1" />
+          </Key>
+          <Property Name="col1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="col2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DIagnosis" Relationship="EHRsystemModel.FK_DIagnosis_icd_chapters" FromRole="icd_chapters" ToRole="DIagnosi" />
+        </EntityType>
+        <EntityType Name="icd_code">
+          <Key>
+            <PropertyRef Name="col0" />
+          </Key>
+          <Property Name="col0" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="col1" Type="Int32" Nullable="false" />
+          <Property Name="col2" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="col3" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="col4" Type="Int32" />
+          <Property Name="col5" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="col6" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="col7" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="col8" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="col9" Type="String" Nullable="false" MaxLength="185" FixedLength="false" Unicode="false" />
+          <Property Name="col10" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="col11" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="col12" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="col13" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="col14" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DIagnosis" Relationship="EHRsystemModel.FK_DIagnosis_icd_code" FromRole="icd_code" ToRole="DIagnosi" />
+        </EntityType>
+        <Association Name="FK_DIagnosis_icd_chapters">
+          <End Type="EHRsystemModel.icd_chapters" Role="icd_chapters" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.DIagnosi" Role="DIagnosi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="icd_chapters">
+              <PropertyRef Name="col1" />
+            </Principal>
+            <Dependent Role="DIagnosi">
+              <PropertyRef Name="ICD_Chapter" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DIagnosis_icd_code">
+          <End Type="EHRsystemModel.icd_code" Role="icd_code" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.DIagnosi" Role="DIagnosi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="icd_code">
+              <PropertyRef Name="col0" />
+            </Principal>
+            <Dependent Role="DIagnosi">
+              <PropertyRef Name="ICD_Code_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="DataSender">
           <Key>
             <PropertyRef Name="DataSenderID" />
           </Key>
           <Property Name="DataSenderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PersonID" Type="Int32" />
-          <Property Name="ReseiverID" Type="Int32" />
+          <Property Name="PatientID" Type="Int32" />
+          <Property Name="DoctorID" Type="Int32" />
+          <Property Name="Sender" Type="Int32" />
           <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PictureInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="Date" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Demographic" Relationship="EHRsystemModel.FK_DataSender_Demographics" FromRole="DataSender" ToRole="Demographic" />
+          <Property Name="Date" Type="DateTime" Precision="7" />
+          <Property Name="Seen" Type="Boolean" />
+          <Property Name="Send" Type="Boolean" />
+          <NavigationProperty Name="Doctor" Relationship="EHRsystemModel.FK_DataSender_Doctors" FromRole="DataSender" ToRole="Doctor" />
+          <NavigationProperty Name="Patient" Relationship="EHRsystemModel.FK_DataSender_Patients" FromRole="DataSender" ToRole="Patient" />
         </EntityType>
-        <Association Name="FK_DataSender_Demographics">
-          <End Type="EHRsystemModel.Demographic" Role="Demographic" Multiplicity="0..1" />
+        <Association Name="FK_DataSender_Doctors">
+          <End Type="EHRsystemModel.Doctor" Role="Doctor" Multiplicity="0..1" />
           <End Type="EHRsystemModel.DataSender" Role="DataSender" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Demographic">
-              <PropertyRef Name="PERSONID" />
+            <Principal Role="Doctor">
+              <PropertyRef Name="DoctorID" />
             </Principal>
             <Dependent Role="DataSender">
+              <PropertyRef Name="DoctorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="PatientID" />
+          </Key>
+          <Property Name="PatientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetNumber" Type="Int32" Nullable="false" />
+          <Property Name="Birthday" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Allergies" Relationship="EHRsystemModel.FK_Allergies_Patients" FromRole="Patient" ToRole="Allergy" />
+          <NavigationProperty Name="Communications" Relationship="EHRsystemModel.FK_Communication_Demographics" FromRole="Patient" ToRole="Communication" />
+          <NavigationProperty Name="DataSenders" Relationship="EHRsystemModel.FK_DataSender_Patients" FromRole="Patient" ToRole="DataSender" />
+          <NavigationProperty Name="DoctorPatientRelations" Relationship="EHRsystemModel.FK_DoctorPatientRelation_Demographics" FromRole="Patient" ToRole="DoctorPatientRelation" />
+          <NavigationProperty Name="Visits" Relationship="EHRsystemModel.FK_Visit_Demographics" FromRole="Patient" ToRole="Visit" />
+        </EntityType>
+        <Association Name="FK_Allergies_Patients">
+          <End Type="EHRsystemModel.Patient" Role="Patient" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.Allergy" Role="Allergy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Allergy">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Communication_Demographics">
+          <End Type="EHRsystemModel.Patient" Role="Patient" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.Communication" Role="Communication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Communication">
               <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DataSender_Patients">
+          <End Type="EHRsystemModel.Patient" Role="Patient" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.DataSender" Role="DataSender" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="DataSender">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DoctorPatientRelation_Demographics">
+          <End Type="EHRsystemModel.Patient" Role="Patient" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.DoctorPatientRelation" Role="DoctorPatientRelation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="DoctorPatientRelation">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_Demographics">
+          <End Type="EHRsystemModel.Patient" Role="Patient" Multiplicity="0..1" />
+          <End Type="EHRsystemModel.Visit" Role="Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDoctor" Type="Boolean" Nullable="false" />
+          <Property Name="Salt" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -591,50 +757,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Contacts">
-            <EntityTypeMapping TypeName="EHRsystemModel.Contact">
-              <MappingFragment StoreEntitySet="Contacts">
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="Contactid" ColumnName="Contactid" />
-                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
-                <ScalarProperty Name="ContactsID" ColumnName="ContactsID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Demographics">
-            <EntityTypeMapping TypeName="EHRsystemModel.Demographic">
-              <MappingFragment StoreEntitySet="Demographics">
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="StreetNumber" ColumnName="StreetNumber" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Sex" ColumnName="Sex" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="PERSONID" ColumnName="PERSONID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DIagnosis">
-            <EntityTypeMapping TypeName="EHRsystemModel.DIagnosi">
-              <MappingFragment StoreEntitySet="DIagnosis">
-                <ScalarProperty Name="ICD_CODE" ColumnName="ICD-CODE" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
-                <ScalarProperty Name="DiagnosisID" ColumnName="DiagnosisID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DocTypes">
-            <EntityTypeMapping TypeName="EHRsystemModel.DocType">
-              <MappingFragment StoreEntitySet="DocType">
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Document_typeID" ColumnName="Document_typeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="EHRsystemModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -646,27 +768,34 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="EHRsystemModel.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Salt" ColumnName="Salt" />
-                <ScalarProperty Name="Key" ColumnName="Key" />
-                <ScalarProperty Name="IsDoctor" ColumnName="IsDoctor" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <EntitySetMapping Name="DoctorPatientRelations">
+            <EntityTypeMapping TypeName="EHRsystemModel.DoctorPatientRelation">
+              <MappingFragment StoreEntitySet="DoctorPatientRelation">
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="RelationID" ColumnName="RelationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Documents">
-            <EntityTypeMapping TypeName="EHRsystemModel.Document">
-              <MappingFragment StoreEntitySet="Documents">
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Document_TypeID" ColumnName="Document_TypeID" />
-                <ScalarProperty Name="file" ColumnName="file" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
-                <ScalarProperty Name="DocumentsID" ColumnName="DocumentsID" />
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="EHRsystemModel.Doctor">
+              <MappingFragment StoreEntitySet="Doctors">
+                <ScalarProperty Name="Speciality" ColumnName="Speciality" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Allergies">
+            <EntityTypeMapping TypeName="EHRsystemModel.Allergy">
+              <MappingFragment StoreEntitySet="Allergies">
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="Reaction" ColumnName="Reaction" />
+                <ScalarProperty Name="Allergy1" ColumnName="Allergy" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="AllergyID" ColumnName="AllergyID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -674,23 +803,92 @@
             <EntityTypeMapping TypeName="EHRsystemModel.Visit">
               <MappingFragment StoreEntitySet="Visit">
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="NumberOfVisit" ColumnName="NumberOfVisit" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
                 <ScalarProperty Name="DoctorPersonID" ColumnName="DoctorPersonID" />
                 <ScalarProperty Name="VisitID" ColumnName="VisitID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DIagnosis">
+            <EntityTypeMapping TypeName="EHRsystemModel.DIagnosi">
+              <MappingFragment StoreEntitySet="DIagnosis">
+                <ScalarProperty Name="ICD_Chapter" ColumnName="ICD_Chapter" />
+                <ScalarProperty Name="ICD_Code_Id" ColumnName="ICD_Code_Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+                <ScalarProperty Name="DiagnosisID" ColumnName="DiagnosisID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="icd_chapters">
+            <EntityTypeMapping TypeName="EHRsystemModel.icd_chapters">
+              <MappingFragment StoreEntitySet="icd_chapters">
+                <ScalarProperty Name="col2" ColumnName="col2" />
+                <ScalarProperty Name="col1" ColumnName="col1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="icd_code">
+            <EntityTypeMapping TypeName="EHRsystemModel.icd_code">
+              <MappingFragment StoreEntitySet="icd_code">
+                <ScalarProperty Name="col14" ColumnName="col14" />
+                <ScalarProperty Name="col13" ColumnName="col13" />
+                <ScalarProperty Name="col12" ColumnName="col12" />
+                <ScalarProperty Name="col11" ColumnName="col11" />
+                <ScalarProperty Name="col10" ColumnName="col10" />
+                <ScalarProperty Name="col9" ColumnName="col9" />
+                <ScalarProperty Name="col8" ColumnName="col8" />
+                <ScalarProperty Name="col7" ColumnName="col7" />
+                <ScalarProperty Name="col6" ColumnName="col6" />
+                <ScalarProperty Name="col5" ColumnName="col5" />
+                <ScalarProperty Name="col4" ColumnName="col4" />
+                <ScalarProperty Name="col3" ColumnName="col3" />
+                <ScalarProperty Name="col2" ColumnName="col2" />
+                <ScalarProperty Name="col1" ColumnName="col1" />
+                <ScalarProperty Name="col0" ColumnName="col0" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="DataSenders">
             <EntityTypeMapping TypeName="EHRsystemModel.DataSender">
               <MappingFragment StoreEntitySet="DataSender">
+                <ScalarProperty Name="Send" ColumnName="Send" />
+                <ScalarProperty Name="Seen" ColumnName="Seen" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Picture" ColumnName="Picture" />
                 <ScalarProperty Name="PictureInfo" ColumnName="PictureInfo" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
-                <ScalarProperty Name="ReseiverID" ColumnName="ReseiverID" />
-                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="Sender" ColumnName="Sender" />
+                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
                 <ScalarProperty Name="DataSenderID" ColumnName="DataSenderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="EHRsystemModel.Patient">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="StreetNumber" ColumnName="StreetNumber" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EHRsystemModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="IsDoctor" ColumnName="IsDoctor" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

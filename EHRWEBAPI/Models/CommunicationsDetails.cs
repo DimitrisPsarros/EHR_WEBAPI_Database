@@ -11,5 +11,6 @@ namespace EHRWEBAPI.Models
         // public Nullable<int> PersonID { get; set; }
         public string email { get; set; }
         public Nullable<int> Telephone { get; set; }
+        public Communication communication { get; set; }
     }
 }

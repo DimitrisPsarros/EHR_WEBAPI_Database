@@ -52,11 +52,18 @@ namespace EHRWEBAPI.Controllers
             }
 
             return Ok(cl);
-
-
-
+            
         }
 
+        [Route("api/CommunicationList/{Personid}")]
+        [HttpGet]
+        [ResponseType(typeof(Communication))]
+        public IQueryable<Communication> GetCom(int Personid)
+        {
+            //return db.Contacts;
+            return (db.Communications.Where(c => (c.PersonID == Personid)));
+        }
+        
         // PUT: api/Communications/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCommunication(int id, Communication communication)

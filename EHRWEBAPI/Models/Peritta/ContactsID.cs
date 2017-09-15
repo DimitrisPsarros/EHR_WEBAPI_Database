@@ -5,9 +5,9 @@ using System.Web;
 
 namespace EHRWEBAPI.Models
 {
-    public class UserDetails
+    public class ContactsID
     {
-        public Nullable<int> PersonID { get; set; }
-        public bool IsDoctor { get; set; }
+        public int? contact1Id { get; set; }
+        public int? contact2Id { get; set; }
     }
 }

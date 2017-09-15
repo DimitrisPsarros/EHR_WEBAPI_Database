@@ -12,20 +12,19 @@ namespace EHRWEBAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Demographic
+    public partial class Patient
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Demographic()
+        public Patient()
         {
+            this.Allergies = new HashSet<Allergy>();
             this.Communications = new HashSet<Communication>();
-            this.Contacts = new HashSet<Contact>();
-            this.Users = new HashSet<User>();
-            this.Documents = new HashSet<Document>();
-            this.Visits = new HashSet<Visit>();
             this.DataSenders = new HashSet<DataSender>();
+            this.DoctorPatientRelations = new HashSet<DoctorPatientRelation>();
+            this.Visits = new HashSet<Visit>();
         }
     
-        public int PERSONID { get; set; }
+        public int PatientID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Sex { get; set; }
@@ -33,19 +32,17 @@ namespace EHRWEBAPI.Models
         public string City { get; set; }
         public string StreetName { get; set; }
         public int StreetNumber { get; set; }
-        public string Birthday { get; set; }
+        public Nullable<System.DateTime> Birthday { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Communication> Communications {internal get; set; }
+        public virtual ICollection<Allergy> Allergies {internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contact> Contacts {internal get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users {internal get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Document> Documents {internal get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Visit> Visits {internal get; set; }
+        public virtual ICollection<Communication> Communications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DataSender> DataSenders {internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DoctorPatientRelation> DoctorPatientRelations {internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Visit> Visits {internal get; set; }
     }
 }

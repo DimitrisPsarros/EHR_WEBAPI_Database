@@ -27,14 +27,16 @@ namespace EHRWEBAPI.Models
     
         public virtual DbSet<Treat_Medicines> Treat_Medicines { get; set; }
         public virtual DbSet<Communication> Communications { get; set; }
-        public virtual DbSet<Contact> Contacts { get; set; }
-        public virtual DbSet<Demographic> Demographics { get; set; }
-        public virtual DbSet<DIagnosi> DIagnosis { get; set; }
-        public virtual DbSet<DocType> DocTypes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Document> Documents { get; set; }
+        public virtual DbSet<DoctorPatientRelation> DoctorPatientRelations { get; set; }
+        public virtual DbSet<Doctor> Doctors { get; set; }
+        public virtual DbSet<Allergy> Allergies { get; set; }
         public virtual DbSet<Visit> Visits { get; set; }
+        public virtual DbSet<DIagnosi> DIagnosis { get; set; }
+        public virtual DbSet<icd_chapters> icd_chapters { get; set; }
+        public virtual DbSet<icd_code> icd_code { get; set; }
         public virtual DbSet<DataSender> DataSenders { get; set; }
+        public virtual DbSet<Patient> Patients { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

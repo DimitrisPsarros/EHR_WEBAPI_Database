@@ -20,14 +20,10 @@ namespace EHRWEBAPI.Controllers
         // GET: api/Demographics
         public IQueryable<DemographicsDetails> GetDemographics()
         {
-            //return db.Demographics;
-
-
-            var DemographicsInfo = from b in db.Demographics
+            var DemographicsInfo = from b in db.Patients
                                    select new DemographicsDetails()
                                    {
-
-                                       PERSONID = b.PERSONID,
+                                       PERSONID = b.PatientID,
                                        FirstName = b.FirstName,
                                        LastName = b.LastName,
                                        Sex = b.Sex,
@@ -38,53 +34,57 @@ namespace EHRWEBAPI.Controllers
                                        Birthday = b.Birthday
                                    };
             return DemographicsInfo;
-
-
-            
-
-
         }
 
         // GET: api/Demographics/5
-        [ResponseType(typeof(DemographicsDetails))]
+        [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> GetDemographic(int id)
         {
-            Demographic demographics = await db.Demographics.FindAsync(id);
+            Patient demographics = await db.Patients.FindAsync(id);
             if (demographics == null)
             {
                 return NotFound();
             }
 
-            DemographicsDetails Demo = new DemographicsDetails();
+            //DemographicsDetails Demo = new DemographicsDetails();
+            //Demo.Birthday = demographics.Birthday;
+            //Demo.City = demographics.City;
+            //Demo.Country = demographics.Country;
+            //Demo.FirstName = demographics.FirstName;
+            //Demo.LastName = demographics.LastName;
+            //Demo.Sex = demographics.Sex;
+            //Demo.StreetName = demographics.StreetName;
+            //Demo.StreetNumber = demographics.StreetNumber;
+            
+            //return Ok(Demo);
+            return Ok(demographics);
+        }
 
-            Demo.Birthday = demographics.Birthday;
-            Demo.City = demographics.City;
-            Demo.Country = demographics.Country;
-            Demo.FirstName = demographics.FirstName;
-            Demo.LastName = demographics.LastName;
-            Demo.Sex = demographics.Sex;
-            Demo.StreetName = demographics.StreetName;
-            Demo.StreetNumber = demographics.StreetNumber;
-
-
-
-            return Ok(Demo);
-
-
-
-           // return Ok(demographic);
+        [Route("api/FullNamePatient/{Personid}")]
+        [HttpGet]
+        [ResponseType(typeof(FullNames))]
+        public IQueryable<FullNames> GetFullName(int Personid)
+        {
+            var contactsList = from b in db.Patients.
+                            Where(c => (c.PatientID == Personid) )
+                               select new FullNames()
+                               {
+                                   FirstName = b.FirstName,
+                                   LastName = b.LastName 
+                               };
+            return contactsList;
         }
 
         // PUT: api/Demographics/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutDemographic(int id, Demographic demographic)
+        public async Task<IHttpActionResult> PutDemographic(int id, Patient demographic)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != demographic.PERSONID)
+            if (id != demographic.PatientID)
             {
                 return BadRequest();
             }
@@ -111,31 +111,31 @@ namespace EHRWEBAPI.Controllers
         }
 
         // POST: api/Demographics
-        [ResponseType(typeof(Demographic))]
-        public async Task<IHttpActionResult> PostDemographic(Demographic demographic)
+        [ResponseType(typeof(Patient))]
+        public async Task<IHttpActionResult> PostDemographic(Patient demographic)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Demographics.Add(demographic);
+            db.Patients.Add(demographic);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = demographic.PERSONID }, demographic);
+            return CreatedAtRoute("DefaultApi", new { id = demographic.PatientID }, demographic);
         }
 
         // DELETE: api/Demographics/5
-        [ResponseType(typeof(Demographic))]
+        [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> DeleteDemographic(int id)
         {
-            Demographic demographic = await db.Demographics.FindAsync(id);
+            Patient demographic = await db.Patients.FindAsync(id);
             if (demographic == null)
             {
                 return NotFound();
             }
 
-            db.Demographics.Remove(demographic);
+            db.Patients.Remove(demographic);
             await db.SaveChangesAsync();
 
             return Ok(demographic);
@@ -152,7 +152,7 @@ namespace EHRWEBAPI.Controllers
 
         private bool DemographicExists(int id)
         {
-            return db.Demographics.Count(e => e.PERSONID == id) > 0;
+            return db.Patients.Count(e => e.PatientID == id) > 0;
         }
     }
 }

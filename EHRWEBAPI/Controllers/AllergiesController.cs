@@ -13,44 +13,51 @@ using EHRWEBAPI.Models;
 
 namespace EHRWEBAPI.Controllers
 {
-    public class DocTypesController : ApiController
+    public class AllergiesController : ApiController
     {
         private EHRsystemEntities db = new EHRsystemEntities();
 
-        // GET: api/DocTypes
-        public IQueryable<DocType> GetDocTypes()
+        // GET: api/Allergies
+        public IQueryable<Allergy> GetAllergies()
         {
-            return db.DocTypes;
+            return db.Allergies;
         }
 
-        // GET: api/DocTypes/5
-        [ResponseType(typeof(DocType))]
-        public async Task<IHttpActionResult> GetDocType(int id)
+        // GET: api/Allergies/5
+        [ResponseType(typeof(Allergy))]
+        public async Task<IHttpActionResult> GetAllergy(int id)
         {
-            DocType docType = await db.DocTypes.FindAsync(id);
-            if (docType == null)
+            Allergy allergy = await db.Allergies.FindAsync(id);
+            if (allergy == null)
             {
                 return NotFound();
             }
-
-            return Ok(docType);
+            return Ok(allergy);
         }
 
-        // PUT: api/DocTypes/5
+        [Route("api/AllergiesList/{Personid}")]
+        [HttpGet]
+        [ResponseType(typeof(Allergy))]
+        public IQueryable<Allergy> GetAllergies(int PersonId)
+        {
+            return db.Allergies.Where( c => c.PatientID==PersonId );
+        }
+
+        // PUT: api/Allergies/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutDocType(int id, DocType docType)
+        public async Task<IHttpActionResult> PutAllergy(int id, Allergy allergy)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != docType.Document_typeID)
+            if (id != allergy.AllergyID)
             {
                 return BadRequest();
             }
 
-            db.Entry(docType).State = EntityState.Modified;
+            db.Entry(allergy).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +65,7 @@ namespace EHRWEBAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DocTypeExists(id))
+                if (!AllergyExists(id))
                 {
                     return NotFound();
                 }
@@ -71,35 +78,35 @@ namespace EHRWEBAPI.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/DocTypes
-        [ResponseType(typeof(DocType))]
-        public async Task<IHttpActionResult> PostDocType(DocType docType)
+        // POST: api/Allergies
+        [ResponseType(typeof(Allergy))]
+        public async Task<IHttpActionResult> PostAllergy(Allergy allergy)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.DocTypes.Add(docType);
+            db.Allergies.Add(allergy);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = docType.Document_typeID }, docType);
+            return CreatedAtRoute("DefaultApi", new { id = allergy.AllergyID }, allergy);
         }
 
-        // DELETE: api/DocTypes/5
-        [ResponseType(typeof(DocType))]
-        public async Task<IHttpActionResult> DeleteDocType(int id)
+        // DELETE: api/Allergies/5
+        [ResponseType(typeof(Allergy))]
+        public async Task<IHttpActionResult> DeleteAllergy(int id)
         {
-            DocType docType = await db.DocTypes.FindAsync(id);
-            if (docType == null)
+            Allergy allergy = await db.Allergies.FindAsync(id);
+            if (allergy == null)
             {
                 return NotFound();
             }
 
-            db.DocTypes.Remove(docType);
+            db.Allergies.Remove(allergy);
             await db.SaveChangesAsync();
 
-            return Ok(docType);
+            return Ok(allergy);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +118,9 @@ namespace EHRWEBAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool DocTypeExists(int id)
+        private bool AllergyExists(int id)
         {
-            return db.DocTypes.Count(e => e.Document_typeID == id) > 0;
+            return db.Allergies.Count(e => e.AllergyID == id) > 0;
         }
     }
 }
