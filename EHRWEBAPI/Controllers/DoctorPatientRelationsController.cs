@@ -55,9 +55,10 @@ namespace EHRWEBAPI.Controllers
                             Where(c => c.PatientID == Personid )
                             select new friends()
                             {
-                                PersonID = b.Doctor.DoctorID,
-                                FirstName = b.Doctor.FirstName,
-                                LastName =b.Doctor.LastName
+                                PersonID   = b.Doctor.DoctorID,
+                                FirstName  = b.Doctor.FirstName,
+                                LastName   = b.Doctor.LastName,
+                                speciality = b.Doctor.Speciality
                             };
             return Friends;
         }

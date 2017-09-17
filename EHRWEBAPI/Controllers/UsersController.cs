@@ -86,12 +86,11 @@ namespace EHRWEBAPI.Controllers
 
         // POST: api/Users
         [ResponseType(typeof(UserDetails))]
-        public async Task<UserDetails> PostUser(User user)
+        public async Task<IHttpActionResult> /*Task<UserDetails>*/ PostUser(User user)
         {
             if (!ModelState.IsValid)
             {
-                 //return BadRequest(ModelState);
-                return null;
+                return BadRequest(ModelState);
             }
             
             var contentType = Request.Content.Headers.ContentType.MediaType;
@@ -104,7 +103,7 @@ namespace EHRWEBAPI.Controllers
 
                 if (userInfo == null)
                 {
-                    return null;
+                    return NotFound();
                 }
                 var saltFromDatabase = userInfo.Salt;
                 
@@ -114,18 +113,20 @@ namespace EHRWEBAPI.Controllers
                 var userInfo1 = db.Users.FirstOrDefault(c => (c.UserName == user.UserName) &&  (c.Password == saltedpassword) );
                 if (userInfo1 == null)
                 {
-                    return null ;
+                    return NotFound();
                 }
                 UserDetails userDetails = new UserDetails();
                 userDetails.PersonID =userInfo1.PersonID;
                 userDetails.IsDoctor= userInfo1.IsDoctor;
-                return userDetails;
+                return Ok(userDetails);
             }
             else
             {
-                return null; // Ok(HttpStatusCode.UnsupportedMediaType);    // check it 
+                return Ok(HttpStatusCode.UnsupportedMediaType);  
             }
         }
+
+
         public string SHA1(string Salt)
         {
             byte[] hash;

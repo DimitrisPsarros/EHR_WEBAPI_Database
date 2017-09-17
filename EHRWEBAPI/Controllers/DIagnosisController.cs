@@ -23,18 +23,45 @@ namespace EHRWEBAPI.Controllers
             return db.DIagnosis; 
         }
 
+        //// GET: api/DIagnosis/5
+        //[ResponseType(typeof(DIagnosi))]
+        //public async Task<IHttpActionResult> GetDIagnosi(int id)
+        //{
+        //    DIagnosi dIagnosi = await db.DIagnosis.FindAsync(id);
+        //    if (dIagnosi == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(dIagnosi);
+        //}
+
+
+
         // GET: api/DIagnosis/5
-        [ResponseType(typeof(DIagnosi))]
+        [ResponseType(typeof(DiagnosisSel))]
         public async Task<IHttpActionResult> GetDIagnosi(int id)
         {
-            DIagnosi dIagnosi = await db.DIagnosis.FindAsync(id);
-            if (dIagnosi == null)
-            {
-                return NotFound();
-            }
+            //DIagnosi dIagnosi = await db.DIagnosis.FindAsync(id);
+            //if (dIagnosi == null)
+            //{
+            //    return NotFound();
+            //}
+            
+            //return Ok(dIagnosi);
 
-            return Ok(dIagnosi);
+            var Data = from b in db.DIagnosis.
+                            Where(c => c.VisitID == id)
+                            select new DiagnosisSel()
+                            {
+                                VisitID     = b.VisitID,
+                                Description = b.Description,
+                                ICD_Code    = b.icd_code.col9,
+                                ICD_Chapter = b.icd_chapters.col2
+                            };
+            return Ok(Data);
         }
+
 
         [Route("api/Diagnosi/{Visitid}")]
         [HttpGet]

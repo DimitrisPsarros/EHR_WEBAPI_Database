@@ -10,5 +10,6 @@ namespace EHRWEBAPI.Models
         public int    PersonID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string speciality { get; set; }
     }
 }
